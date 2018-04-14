@@ -55,8 +55,8 @@ G4VPhysicalVolume* T1DetectorConstruction::Construct()
 
   //////////////////////CEE-1
 
-  G4double CEE_world_sx = 5*m;  //gao
-  G4double CEE_world_sy = 10*m;  //kuan
+  G4double CEE_world_sx = 10*m;  //gao
+  G4double CEE_world_sy = 5*m;  //kuan
   G4double CEE_world_sz = 10*m;  //chang  zhouxiang
   G4ThreeVector CEE_world_p = G4ThreeVector(0*cm, 0*cm, 0*cm);
   G4Material* CEE_world_mat = nist->FindOrBuildMaterial("G4_AIR");
@@ -73,8 +73,8 @@ G4VPhysicalVolume* T1DetectorConstruction::Construct()
   G4Material* CEE_Pix_mat = nist->FindOrBuildMaterial("G4_Galactic");//Ar:CO2 7:3
   G4VisAttributes* CEE_Pix_Vis = new G4VisAttributes(G4Colour(0.0,0.0,1.0,1));
 
-  G4double CEE_TPC_sx = 80*cm;
-  G4double CEE_TPC_sy = 100*cm;
+  G4double CEE_TPC_sx = 100*cm;
+  G4double CEE_TPC_sy = 80*cm;
   G4double CEE_TPC_sz = 80*cm;
   G4double CEE_TPC_px = 0*cm;
   G4double CEE_TPC_py = 0*cm;
@@ -157,7 +157,7 @@ T1T0 ceeT1T0;
                     false,                 //no boolean operation
                     0,                     //copy number
                     checkOverlaps);        //overlaps checking
-                    
+
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#include "StringSplit.hh"
+
 //字符串分割
 std::vector<std::string> StringSplit(std::string str,std::string pattern)
 {
@@ -17,7 +19,7 @@ std::vector<std::string> StringSplit(std::string str,std::string pattern)
         if(pos<size)
         {
             std::string s=str.substr(i,pos-i);
-            result.push_back(s);
+            if(s!=""){result.push_back(s);}
             i=pos+pattern.size()-1;
         }
     }
