@@ -28,14 +28,87 @@
 #include "StringSplit.hh"
 
 using namespace std;
-
+/*
+void line_out_(ofstream& outFile, double var)
+{
+  outFile<<"1-1-1"<<" "<<"6"<<"0.55"<<" "<<"60"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+}
+*/
 
 T1T0::T1T0()
 {
 
+  //ofstream //outFile;
+  ////outFile.open("error.txt",ios::app);
+  ////outFile <<"T1T0 构造函数开始"<<endl;
+  G4int nofBox0 = 12;
   ofstream outFile;
-  outFile.open("error.txt",ios::app);
-  outFile <<"T1T0 构造函数开始"<<endl;
+  outFile.open("./data/T0.dat",ios::app);
+  outFile<<"#1 相对于全局参考系的位置  殴拉角1(Z) 殴拉角2(Y) 殴拉角3(Z) ##这是下一级坐标的参考系  单位：mm   注释行开头为#，不支持行内注释"<<endl;
+  outFile<<"0 0 0 0 0 0"<<endl;
+  outFile<<"#2 rmin;rmax;T0的dz（全长）"<<endl;
+  outFile<<"0 30 80"<<endl<<endl;
+  outFile<<"#3 box数目 #每个box数据行数：4  ##之后可改为3"<<endl;
+  outFile<<nofBox0*2<<endl<<endl;  ///to_string(nofBox0)
+  outFile<<"##################################################################"<<endl;
+  outFile<<"#- Boxid 这个Box下MRPC数目  ##"<<endl;
+  outFile<<"#- Box:全长dx dy dz 位置x 位置y 位置z 殴拉角1(Z) 殴拉角2(Y) 殴拉角3(Z)  ##Box位置 作为下一级坐标的参考系   ##殴拉角单位：rad"<<endl;
+  outFile<<"##-- MRPC:Boxid-MRPCid dx dy dz 位置x 位置y 位置z 殴拉角1(Z) 殴拉角2(Y) 殴拉角3(Z) 层数（奇数）"<<endl;
+  outFile<<"###--- MRPC每层:Boxid-MRPCid-id dx dy dz 位置x 位置y 位置z ##约定dz为气隙/玻璃厚度"<<endl;
+  outFile<<"##################################################################"<<endl<<endl;
+
+
+  for(int i=1;i<=nofBox0;i++){
+    outFile<<i<<" "<<"1"<<endl;
+    G4double phi_d=(i-1)*30;
+    G4double phi_r=(i-1)*30*pi/180;
+    G4double px = 18*sin(phi_r);
+    G4double py = 18*cos(phi_r);
+    G4double pz = 0;
+
+    outFile<<"4"<<" "<<"6"<<" "<<"60"<<" "<<px<<" "<<py<<" "<<pz<<" "<<-phi_r<<" "<<"0"<<" "<<"0"<<" "<<"1"<<endl;//////
+    outFile<<"1-1"<<" "<<"6"<<" "<<"4"<<" "<<"60"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"11"<<endl;
+    outFile<<"1-1-1"<<" "<<"6"<<" "<<"0.55"<<" "<<"60"<<" "<<"0"<<" "<<"1.775"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-2"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"1.3"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-3"<<" "<<"6"<<" "<<"0.40"<<" "<<"60"<<" "<<"0"<<" "<<"0.975"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-4"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"0.65"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-5"<<" "<<"6"<<" "<<"0.40"<<" "<<"60"<<" "<<"0"<<" "<<"0.325"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-6"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-7"<<" "<<"6"<<" "<<"0.40"<<" "<<"60"<<" "<<"0"<<" "<<"-0.325"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-8"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"-0.65"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-9"<<" "<<"6"<<" "<<"0.40"<<" "<<"60"<<" "<<"0"<<" "<<"-0.975"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-10"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"-1.3"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-11"<<" "<<"6"<<" "<<"0.55"<<" "<<"60"<<" "<<"0"<<" "<<"-1.775"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+  }
+  for(int i=1;i<=nofBox0;i++){
+    outFile<<i+nofBox0<<" "<<"1"<<endl;
+    G4double phi_d=15+(i-1)*30;
+    G4double phi_r=(15+(i-1)*30)*pi/180;
+    G4double px = 22.5*sin(phi_r);
+    G4double py = 22.5*cos(phi_r);
+    G4double pz = 0;
+
+    outFile<<"4"<<" "<<"6"<<" "<<"60"<<" "<<px<<" "<<py<<" "<<pz<<" "<<-phi_r<<" "<<"0"<<" "<<"0"<<" "<<"1"<<endl;//////
+    outFile<<"1-1"<<" "<<"6"<<" "<<"4"<<" "<<"60"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"11"<<endl;
+    outFile<<"1-1-1"<<" "<<"6"<<" "<<"0.55"<<" "<<"60"<<" "<<"0"<<" "<<"1.775"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-2"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"1.3"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-3"<<" "<<"6"<<" "<<"0.40"<<" "<<"60"<<" "<<"0"<<" "<<"0.975"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-4"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"0.65"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-5"<<" "<<"6"<<" "<<"0.40"<<" "<<"60"<<" "<<"0"<<" "<<"0.325"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-6"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-7"<<" "<<"6"<<" "<<"0.40"<<" "<<"60"<<" "<<"0"<<" "<<"-0.325"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-8"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"-0.65"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-9"<<" "<<"6"<<" "<<"0.40"<<" "<<"60"<<" "<<"0"<<" "<<"-0.975"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-10"<<" "<<"6"<<" "<<"0.25"<<" "<<"60"<<" "<<"0"<<" "<<"-1.3"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+    outFile<<"1-1-11"<<" "<<"6"<<" "<<"0.55"<<" "<<"60"<<" "<<"0"<<" "<<"-1.775"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"0"<<endl;
+  }
+  outFile.close();
+
+
+
+
+
+
 
 
 
@@ -54,11 +127,11 @@ T1T0::T1T0()
   hangshu=0;   // "将要读第hangshu+1行"
   while(hangshu<=2){
     if((getline(theFile,str))){
-      //outFile <<"T1T0 构造函数 56  读入数据前三行"<<"  str:"<<str<<endl;
+      ////outFile <<"T1T0 构造函数 56  读入数据前三行"<<"  str:"<<str<<endl;
       if(!str.empty()){
-        //outFile <<"T1T0 构造函数 58  读入数据前三行"<<"  str:"<<str<<endl;
+        ////outFile <<"T1T0 构造函数 58  读入数据前三行"<<"  str:"<<str<<endl;
         if(str[0]!=' '&&str[0]!='#'){
-          outFile <<"T1T0 构造函数 60  读入数据前三行"<<"  str:"<<str<<"  hangshu:"<<hangshu+1<<endl;
+          ////outFile <<"T1T0 构造函数 60  读入数据前三行"<<"  str:"<<str<<"  hangshu:"<<hangshu+1<<endl;
           hangshu=hangshu+1;
           if(hangshu==1){
             vector<string> result=StringSplit(str," ");
@@ -75,14 +148,14 @@ T1T0::T1T0()
             vector<string> result=StringSplit(str," ");
             solidT0 = new G4Tubs(nameT0+"_solid",stod(result[0])*mm,stod(result[1])*mm,0.5*stod(result[2])*mm,0,2*pi);
             G4Material* matT0 = nist->FindOrBuildMaterial("G4_AIR");                /////gai
-            G4VisAttributes* visT0 = new G4VisAttributes(G4Colour(0.1,0.4,1.5,1));  /////gai
+            G4VisAttributes* visT0 = new G4VisAttributes(G4Colour(0.1,0.4,1.5,0));  /////gai
             logicT0 = new G4LogicalVolume(solidT0,matT0,nameT0+"_logic");
             logicT0 -> SetVisAttributes(visT0);
           }
           else if(hangshu==3){
-            outFile <<"T1T0 构造函数 79  读入数据前三行"<<"  str:"<<str<<endl;
+            //outFile <<"T1T0 构造函数 79  读入数据前三行"<<"  str:"<<str<<endl;
             vector<string> result=StringSplit(str," ");
-            outFile <<"T1T0 构造函数 81  读入数据前三行"<<"  result:"<<result[0]<<endl;
+            //outFile <<"T1T0 构造函数 81  读入数据前三行"<<"  result:"<<result[0]<<endl;
             numofbox=stoi(result[0]);
           }
 
@@ -91,7 +164,7 @@ T1T0::T1T0()
       }
     }
   }
-  outFile <<"T1T0 构造函数 87  读入数据读完前三行"<<"  numofbox:"<<numofbox<<endl;
+  //outFile <<"T1T0 构造函数 87  读入数据读完前三行"<<"  numofbox:"<<numofbox<<endl;
   for(int i=0;i<numofbox;i++){
     G4int hangshu0=hangshu;
     G4int numofMRPC=0;
@@ -101,22 +174,22 @@ T1T0::T1T0()
         if(!str.empty()){
           if(str[0]!=' '&&str[0]!='#'){
             hangshu=hangshu+1;
-            outFile <<"T1T0 构造函数 96  读入数据 4  str:"<<str<<"  i:"<<i<<endl;
+            //outFile <<"T1T0 构造函数 96  读入数据 4  str:"<<str<<"  i:"<<i<<endl;
             vector<string> result=StringSplit(str," ");
             nowboxid=result[0];
-            numofMRPC=stoi(result[1]);
+            //numofMRPC=stoi(result[1]);
           }
         }
       }
     }
-    outFile <<"T1T0 构造函数 102  读入数据 4 numofMRPC:"<<numofMRPC<<endl;
+    //outFile <<"T1T0 构造函数 102  读入数据 4 numofMRPC:"<<numofMRPC<<endl;
     hangshu0=hangshu;
     while(hangshu==hangshu0){
       if(getline(theFile,str)){
-        outFile <<"T1T0 构造函数 111  读入数据 5"<<"  str:"<<str<<endl;
+        //outFile <<"T1T0 构造函数 111  读入数据 5"<<"  str:"<<str<<endl;
         if(!str.empty()){
           if(str[0]!=' '&&str[0]!='#'){
-            outFile <<"T1T0 构造函数 114  读入数据 5"<<"  str:"<<str<<endl;
+            //outFile <<"T1T0 构造函数 114  读入数据 5"<<"  str:"<<str<<endl;
             hangshu=hangshu+1;
 
             G4double box_dx,box_dy,box_dz;
@@ -132,14 +205,15 @@ T1T0::T1T0()
             box_eZ1=stod(result[6]);
             box_eY=stod(result[7]);
             box_eZ2=stod(result[8]);
-            outFile <<"T1T0 构造函数 130  读入数据"<<"  box_eZ2:"<<box_eZ2<<endl;
+            numofMRPC=stoi(result[9]);
+            //outFile <<"T1T0 构造函数 130  读入数据"<<"  box_eZ2:"<<box_eZ2<<endl;
 
             G4Box* solidT0box = new G4Box(nameT0+"_box_"+nowboxid+"_solid",0.5*box_dx*mm,0.5*box_dy*mm,0.5*box_dz*mm);
             G4Material* matT0box = nist->FindOrBuildMaterial("G4_AIR");                /////gai
-            G4VisAttributes* visT0box = new G4VisAttributes(G4Colour(0.1,0.8,1.1,1));  /////gai
+            G4VisAttributes* visT0box = new G4VisAttributes(G4Colour(0.1,0.8,1.1,0));  /////gai
             logicT0box = new G4LogicalVolume(solidT0box,matT0box,nameT0+"_box_"+nowboxid+"_logic");
             logicT0box -> SetVisAttributes(visT0box);
-            outFile <<"T1T0 构造函数 137  读入数据 hangshu:"<<hangshu<<endl;
+            //outFile <<"T1T0 构造函数 137  读入数据 hangshu:"<<hangshu<<endl;
 
             G4ThreeVector boxp(box_px*mm,box_py*mm,box_pz*mm);
             G4RotationMatrix boxrot;
@@ -159,9 +233,9 @@ T1T0::T1T0()
         }
       }
     }
-    outFile <<"T1T0 构造函数 156  开始MRPC"<<"  numofMRPC:"<<numofMRPC<<endl;
+    //outFile <<"T1T0 构造函数 156  开始MRPC"<<"  numofMRPC:"<<numofMRPC<<endl;
     for(int j=0;j<numofMRPC;j++){
-      outFile <<"T1T0 构造函数 158  开始MRPC"<<"  numofMRPC:"<<numofMRPC<<" j:"<<j<<endl;
+      //outFile <<"T1T0 构造函数 158  开始MRPC"<<"  numofMRPC:"<<numofMRPC<<" j:"<<j<<endl;
       G4int numofceng=0;
       G4LogicalVolume* logicT0boxMRPC;
       hangshu0=hangshu;
@@ -190,7 +264,7 @@ T1T0::T1T0()
 
               G4Box* solidT0boxMRPC = new G4Box(nameT0+"_box_"+nowboxid+"_MRPC_"+nowMRPCid+"_solid",0.5*box_dx*mm,0.5*box_dy*mm,0.5*box_dz*mm);
               G4Material* matT0boxMRPC = nist->FindOrBuildMaterial("G4_AIR");                /////gai
-              G4VisAttributes* visT0boxMRPC = new G4VisAttributes(G4Colour(0.1,0.8,1.1,1));  /////gai
+              G4VisAttributes* visT0boxMRPC = new G4VisAttributes(G4Colour(0.1,0.8,1.1,0));  /////gai
               logicT0boxMRPC = new G4LogicalVolume(solidT0boxMRPC,matT0boxMRPC,nameT0+"_box_"+nowboxid+"_MRPC_"+nowMRPCid+"_logic");
               logicT0boxMRPC -> SetVisAttributes(visT0boxMRPC);
 
@@ -269,7 +343,7 @@ T1T0::T1T0()
 
   }
 
-  outFile.close();
+  //outFile.close();
   theFile.close();
 
 
