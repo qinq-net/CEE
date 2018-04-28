@@ -25,6 +25,7 @@
 
 #include "T1T0.hh"
 #include "T1TPC.hh"
+#include "T1iTOF.hh"
 
 using namespace std;
 
@@ -52,18 +53,18 @@ G4VPhysicalVolume* T1DetectorConstruction::Construct()
 
   // Option to switch on/off checking of volumes overlaps
   //
-  G4bool checkOverlaps = false;
+  G4bool checkOverlaps = true;
 
   //////////////////////CEE-1
 
-  G4double CEE_world_sx = 10*m;  //gao
-  G4double CEE_world_sy = 5*m;  //kuan
-  G4double CEE_world_sz = 10*m;  //chang  zhouxiang
+  G4double CEE_world_sx = 3*m;  //kuan
+  G4double CEE_world_sy = 3*m;  //gao
+  G4double CEE_world_sz = 8*m;  //chang  zhouxiang
   G4ThreeVector CEE_world_p = G4ThreeVector(0*cm, 0*cm, 0*cm);
   G4Material* CEE_world_mat = nist->FindOrBuildMaterial("G4_AIR");
   G4VisAttributes* CEE_world_Vis = new G4VisAttributes(G4Colour(0.0,0.0,0.0,0.0));
 
-
+/*
   G4double CEE_Pix_sx = 3*cm;
   G4double CEE_Pix_sy = 3*cm;
   G4double CEE_Pix_sz = 3*cm;
@@ -73,7 +74,7 @@ G4VPhysicalVolume* T1DetectorConstruction::Construct()
   G4ThreeVector CEE_Pix_p = G4ThreeVector(CEE_Pix_px, CEE_Pix_py, CEE_Pix_pz);
   G4Material* CEE_Pix_mat = nist->FindOrBuildMaterial("G4_Galactic");//Ar:CO2 7:3
   G4VisAttributes* CEE_Pix_Vis = new G4VisAttributes(G4Colour(0.0,0.0,1.0,1));
-
+*/
 /*
   G4double CEE_TPC_sx = 100*cm;
   G4double CEE_TPC_sy = 80*cm;
@@ -122,6 +123,7 @@ G4VPhysicalVolume* T1DetectorConstruction::Construct()
                       checkOverlaps);        //overlaps checking
   CEE_world_logic -> SetVisAttributes(CEE_world_Vis);
 //
+/*
 // CEE_Pix
 //
 
@@ -144,6 +146,7 @@ G4LogicalVolume* CEE_Pix_logic =
                     0,                     //copy number
                     checkOverlaps);        //overlaps checking
 CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
+*/
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -151,7 +154,7 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 //
 
 
-T1T0 CEE_T0;
+  T1T0 CEE_T0;
   new G4PVPlacement(CEE_T0.transT0,
                     CEE_T0.logicT0,            //its logical volume
                     "CEE_T0_phys",               //its name
@@ -165,10 +168,32 @@ T1T0 CEE_T0;
 //
 // CEE_TPC
 //
-T1TPC CEE_TPC;
+  T1TPC CEE_TPC;
   new G4PVPlacement(CEE_TPC.transTPC,
                     CEE_TPC.logicTPC,            //its logical volume
                     "CEE_TPC_phys",               //its name
+                    CEE_world_logic,                     //its mother  volume
+                    false,                 //no boolean operation
+                    0,                     //copy number
+                    checkOverlaps);        //overlaps checking
+
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+//
+// CEE_iTOF
+//
+  T1iTOF CEE_iTOF;
+  new G4PVPlacement(CEE_iTOF.transiTOF[0],
+                    CEE_iTOF.logiciTOF[0],            //its logical volume
+                    "CEE_iTOF_phys",               //its name
+                    CEE_world_logic,                     //its mother  volume
+                    false,                 //no boolean operation
+                    0,                     //copy number
+                    checkOverlaps);        //overlaps checking
+  //
+  new G4PVPlacement(CEE_iTOF.transiTOF[1],
+                    CEE_iTOF.logiciTOF[1],            //its logical volume
+                    "CEE_iTOF_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
                     0,                     //copy number
