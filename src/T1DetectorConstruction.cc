@@ -24,6 +24,7 @@
 
 
 #include "T1T0.hh"
+#include "T1TPC.hh"
 
 using namespace std;
 
@@ -73,6 +74,7 @@ G4VPhysicalVolume* T1DetectorConstruction::Construct()
   G4Material* CEE_Pix_mat = nist->FindOrBuildMaterial("G4_Galactic");//Ar:CO2 7:3
   G4VisAttributes* CEE_Pix_Vis = new G4VisAttributes(G4Colour(0.0,0.0,1.0,1));
 
+/*
   G4double CEE_TPC_sx = 100*cm;
   G4double CEE_TPC_sy = 80*cm;
   G4double CEE_TPC_sz = 80*cm;
@@ -82,7 +84,7 @@ G4VPhysicalVolume* T1DetectorConstruction::Construct()
   G4ThreeVector CEE_TPC_p = G4ThreeVector(CEE_TPC_px, CEE_TPC_py, CEE_TPC_pz);
   G4Material* CEE_TPC_mat = nist->FindOrBuildMaterial("G4_Galactic");//Ar:CH4 9:1
   G4VisAttributes* CEE_TPC_Vis = new G4VisAttributes(G4Colour(0.0,0.0,1.0,0.5));
-
+*/
 
 
 
@@ -149,9 +151,9 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 //
 
 
-T1T0 ceeT1T0;
-  new G4PVPlacement(ceeT1T0.transT0,
-                    ceeT1T0.logicT0,            //its logical volume
+T1T0 CEE_T0;
+  new G4PVPlacement(CEE_T0.transT0,
+                    CEE_T0.logicT0,            //its logical volume
                     "CEE_T0_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
@@ -163,26 +165,15 @@ T1T0 ceeT1T0;
 //
 // CEE_TPC
 //
-
-G4Box* CEE_TPC_solid =
-  new G4Box("CEE_TPC_solid",                       //its name
-     0.5*CEE_TPC_sx, 0.5*CEE_TPC_sy, 0.5*CEE_TPC_sz);     //its size
-
-G4LogicalVolume* CEE_TPC_logic =
-  new G4LogicalVolume(CEE_TPC_solid,          //its solid
-                      CEE_TPC_mat,           //its material
-                      "CEE_TPC_logic");            //its name
-
-
-  new G4PVPlacement(0,                     //no rotation
-                    CEE_TPC_p,       //at (,,)
-                    CEE_TPC_logic,            //its logical volume
+T1TPC CEE_TPC;
+  new G4PVPlacement(CEE_TPC.transTPC,
+                    CEE_TPC.logicTPC,            //its logical volume
                     "CEE_TPC_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
                     0,                     //copy number
                     checkOverlaps);        //overlaps checking
-CEE_TPC_logic -> SetVisAttributes(CEE_TPC_Vis);
+
 //////////////////////////////////////////////////////////////////////////////
 /*
 
