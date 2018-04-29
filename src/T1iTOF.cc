@@ -289,7 +289,7 @@ void T1iTOF::T1iTOF_exampledata(int iTOF_id)
     //G4double phi_d=(i-1)*30;
     //G4double phi_r=(i-1)*30*pi/180;
     G4double px = 10 ;
-    G4double py = 450-i*30;
+    G4double py = 440-i*30;
     G4double pz = 0;
 
 
@@ -333,7 +333,7 @@ void T1iTOF::T1iTOF_exampledata(int iTOF_id)
     //G4double phi_d=(i-1)*30;
     //G4double phi_r=(i-1)*30*pi/180;
     G4double px = -10;
-    G4double py = -450+(i-nofBox0)*30;
+    G4double py = -440+(i-nofBox0)*30;
     G4double pz = 0;
 
     outFile<<"10"<<" "<<"20"<<" "<<"850"<<" "<<px<<" "<<py<<" "<<pz<<" "<<"0"<<" "<<"0"<<" "<<"0"<<" "<<"3"<<endl;//////
