@@ -26,6 +26,8 @@
 #include "T1T0.hh"
 #include "T1TPC.hh"
 #include "T1iTOF.hh"
+#include "T1eTOF.hh"
+
 
 using namespace std;
 
@@ -185,7 +187,7 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
   T1iTOF CEE_iTOF;
   new G4PVPlacement(CEE_iTOF.transiTOF[0],
                     CEE_iTOF.logiciTOF[0],            //its logical volume
-                    "CEE_iTOF_phys",               //its name
+                    "CEE_iTOF1_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
                     0,                     //copy number
@@ -193,7 +195,29 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
   //
   new G4PVPlacement(CEE_iTOF.transiTOF[1],
                     CEE_iTOF.logiciTOF[1],            //its logical volume
-                    "CEE_iTOF_phys",               //its name
+                    "CEE_iTOF2_phys",               //its name
+                    CEE_world_logic,                     //its mother  volume
+                    false,                 //no boolean operation
+                    0,                     //copy number
+                    checkOverlaps);        //overlaps checking
+
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+//
+// CEE_eTOF
+//
+  T1eTOF CEE_eTOF;
+  new G4PVPlacement(CEE_eTOF.transeTOF[0],
+                    CEE_eTOF.logiceTOF[0],            //its logical volume
+                    "CEE_eTOF1_phys",               //its name
+                    CEE_world_logic,                     //its mother  volume
+                    false,                 //no boolean operation
+                    0,                     //copy number
+                    checkOverlaps);        //overlaps checking
+  //
+  new G4PVPlacement(CEE_eTOF.transeTOF[1],
+                    CEE_eTOF.logiceTOF[1],            //its logical volume
+                    "CEE_eTOF2_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
                     0,                     //copy number
