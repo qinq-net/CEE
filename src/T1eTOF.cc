@@ -77,7 +77,7 @@ void T1eTOF::T1eTOF_0(int eTOF_id)
   }
 
 
-  ///读第二行，构建TPC
+  ///读第二行，构建eTOF
   ReadLine(theFile,result);
   {
     solideTOF = new G4Box(nameeTOF+"_solid",stod(result[0])*mm,stod(result[1])*mm,0.5*stod(result[2])*mm);
@@ -217,10 +217,10 @@ void T1eTOF::T1eTOF_0(int eTOF_id)
           G4Box* solideTOFboxMRPCceng = new G4Box(nameeTOF+"_box_"+nowboxid+"_MRPC_"+nowMRPCid+"_ceng_"+cengid+"_solid",0.5*box_dx*mm,0.5*box_dy*mm,0.5*box_dz*mm);
           /////gai
           G4Material* mateTOFboxMRPCceng = nist->FindOrBuildMaterial("G4_AIR");                /////gai
-          G4VisAttributes* viseTOFboxMRPCceng = new G4VisAttributes(G4Colour(1.1,0.8,0.1,1));  /////gai
-          if(i>numofbox){
+          G4VisAttributes* viseTOFboxMRPCceng = new G4VisAttributes(G4Colour(0.2,0.5,0.8,0.9));  /////gai
+          if(k%2!=0){
             mateTOFboxMRPCceng = nist->FindOrBuildMaterial("G4_AIR");                /////gai
-            viseTOFboxMRPCceng = new G4VisAttributes(G4Colour(1.1,0.1,0.8,1));  /////gai
+            viseTOFboxMRPCceng = new G4VisAttributes(G4Colour(0.2,0.5,0.8,0.8));  /////gai
           }
           /////gai
           G4LogicalVolume* logiceTOFboxMRPCceng = new G4LogicalVolume(solideTOFboxMRPCceng,mateTOFboxMRPCceng,nameeTOF+"_box_"+nowboxid+"_MRPC_"+nowMRPCid+"_ceng_"+cengid+"_logic");

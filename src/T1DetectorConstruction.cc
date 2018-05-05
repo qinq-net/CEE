@@ -27,6 +27,9 @@
 #include "T1TPC.hh"
 #include "T1iTOF.hh"
 #include "T1eTOF.hh"
+#include "T1ZDC.hh"
+#include "T1MWDC.hh"
+
 
 
 using namespace std;
@@ -59,9 +62,9 @@ G4VPhysicalVolume* T1DetectorConstruction::Construct()
 
   //////////////////////CEE-1
 
-  G4double CEE_world_sx = 3*m;  //kuan
-  G4double CEE_world_sy = 3*m;  //gao
-  G4double CEE_world_sz = 8*m;  //chang  zhouxiang
+  G4double CEE_world_sx = 5*m;  //kuan
+  G4double CEE_world_sy = 5*m;  //gao
+  G4double CEE_world_sz = 15*m;  //chang  zhouxiang
   G4ThreeVector CEE_world_p = G4ThreeVector(0*cm, 0*cm, 0*cm);
   G4Material* CEE_world_mat = nist->FindOrBuildMaterial("G4_AIR");
   G4VisAttributes* CEE_world_Vis = new G4VisAttributes(G4Colour(0.0,0.0,0.0,0.0));
@@ -184,6 +187,7 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 //
 // CEE_iTOF
 //
+
   T1iTOF CEE_iTOF;
   new G4PVPlacement(CEE_iTOF.transiTOF[0],
                     CEE_iTOF.logiciTOF[0],            //its logical volume
@@ -223,6 +227,35 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
                     0,                     //copy number
                     checkOverlaps);        //overlaps checking
 
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+//
+// CEE_ZDC
+//
+  T1ZDC CEE_ZDC;
+  new G4PVPlacement(CEE_ZDC.transZDC,
+                    CEE_ZDC.logicZDC,            //its logical volume
+                    "CEE_ZDC_phys",               //its name
+                    CEE_world_logic,                     //its mother  volume
+                    false,                 //no boolean operation
+                    0,                     //copy number
+                    checkOverlaps);        //overlaps checking
+
+//////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+//
+// CEE_MWDC
+//
+  T1MWDC CEE_MWDC;
+  for(int id=1;id<=6;id++){
+    new G4PVPlacement(CEE_MWDC.transMWDC[id-1],
+                      CEE_MWDC.logicMWDC[id-1],            //its logical volume
+                      "CEE_MWDC"+to_string(id)+"_phys",               //its name
+                      CEE_world_logic,                     //its mother  volume
+                      false,                 //no boolean operation
+                      0,                     //copy number
+                      checkOverlaps);        //overlaps checking
+  }
 //////////////////////////////////////////////////////////////////////////////
 /*
 
