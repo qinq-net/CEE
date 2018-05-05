@@ -207,12 +207,7 @@ void T1MWDC::T1MWDC_exampledata(int MWDC_id)
   G4double MWDC_dx,MWDC_dy,MWDC_dz;
   G4double MWDC_eZ1,MWDC_eY,MWDC_eZ2;
   G4double phi_r,r0;
-  if(MWDC_id<=3){
-    phi_r = 0.35;
-  }
-  else{
-    phi_r = -0.35;
-  }
+
   switch(MWDC_id){
     case 1:
       phi_r = 0.35;
@@ -243,7 +238,7 @@ void T1MWDC::T1MWDC_exampledata(int MWDC_id)
   MWDC_px = r0*sin(phi_r);
   MWDC_py = 0;
   MWDC_pz = r0*cos(phi_r);
-  MWDC_dx = fabs(2*r0*sin(phi_r-0.1));
+  MWDC_dx = fabs(2*r0*sin(phi_r)-200);
   MWDC_dy = 1000;
   MWDC_dz = 100;
   MWDC_eZ1 = 0;
