@@ -3,6 +3,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "T1TPC.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -16,11 +17,17 @@ class T1DetectorConstruction : public G4VUserDetectorConstruction
     virtual ~T1DetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
     G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
 
   protected:
     G4LogicalVolume*  fScoringVolume;
+
+  private:
+    T1TPC* CEE_TPC;
+    virtual void SetupDetectors();
+    virtual void SetupField();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

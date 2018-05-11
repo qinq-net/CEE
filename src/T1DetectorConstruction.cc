@@ -30,7 +30,9 @@
 #include "T1ZDC.hh"
 #include "T1MWDC.hh"
 
-
+// Sensitive detectors
+#include <G4SDManager.hh>
+#include "T1TPCDigi.hh"
 
 using namespace std;
 
@@ -173,9 +175,9 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 //
 // CEE_TPC
 //
-  T1TPC CEE_TPC;
-  new G4PVPlacement(CEE_TPC.transTPC,
-                    CEE_TPC.logicTPC,            //its logical volume
+  CEE_TPC = new T1TPC();
+  new G4PVPlacement(CEE_TPC->transTPC,
+                    CEE_TPC->logicTPC,            //its logical volume
                     "CEE_TPC_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
@@ -311,3 +313,29 @@ testlogic -> SetVisAttributes(CEE_TPC_Vis);
   //
   return CEE_world_phys;
 }
+
+void T1DetectorConstruction::ConstructSDandField()
+{
+	this->SetupDetectors();
+	this->SetupField();
+}
+
+void T1DetectorConstruction::SetupDetectors()
+{
+	// sensitive detectors
+	G4SDManager::GetSDMpointer()->SetVerboseLevel(2);
+	// TPC
+	{
+		G4String detName = CEE_TPC->logicTPC->GetName() + "_det";
+		G4int depth = 0;
+		T1TPCDigi* det = new T1TPCDigi(detName, depth);
+		G4SDManager::GetSDMpointer()->AddNewDetector(det);
+		CEE_TPC->logicTPC->SetSensitiveDetector(det);
+	}
+}
+
+void T1DetectorConstruction::SetupField()
+{
+	;
+}
+	
