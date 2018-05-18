@@ -4,7 +4,7 @@
 #include <G4SystemOfUnits.hh>
 
 CEEPSStep::CEEPSStep(G4String name, G4int depth)
-	: G4VPrimitiveScorer(name, depth), HCID(-1), EvtMap(0), onlymain(TRUE)
+	: G4VPrimitiveScorer(name, depth), HCID(-1), EvtMap(0), onlymain(FALSE)
 {
 	;
 }
@@ -23,7 +23,7 @@ CEEPSStep::~CEEPSStep()
 G4bool CEEPSStep::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
 	G4int trackID = aStep->GetTrack()->GetTrackID();
-	if(!(onlymain) || aStep->GetTrack()->GetTrackID() == 0)
+	if(!(onlymain) || aStep->GetTrack()->GetTrackID() == 1)
 	{
 		G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
 		G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
@@ -78,7 +78,8 @@ void CEEPSStep::PrintAll()
 		G4cout 	<< " >   copy no.: " << copyItr.first << G4endl;
 		for(auto trackItr: *copyItr.second)
 		{
-			G4cout 	<< " >> t=" << trackItr->postStepPoint->GetGlobalTime()/ns
+			G4cout 	<< " >> TID=" << trackItr->trackID
+				<< " t=" << trackItr->postStepPoint->GetGlobalTime()/ns
 				<< "ns x=" << trackItr->postStepPoint->GetPosition().x()/mm
 				<< "mm y=" << trackItr->postStepPoint->GetPosition().y()/mm
 				<< "mm z=" << trackItr->postStepPoint->GetPosition().z()/mm
