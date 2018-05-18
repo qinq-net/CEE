@@ -9,8 +9,8 @@
 typedef struct
 {
 	G4int trackID;
-	G4StepPoint* preStepPoint;
-	G4StepPoint* postStepPoint;
+	G4double time;
+	G4ThreeVector position;
 	G4double deltaEnergy;
 	G4double energyDeposit;
 } CEEStepData;
