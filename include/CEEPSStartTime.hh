@@ -20,6 +20,7 @@ class CEEPSStartTime : public G4VPrimitiveScorer
 	virtual void clear();
 	virtual void DrawAll();
 	virtual void PrintAll();
+	G4THitsMap<G4double>* GetMap() { return EvtMap; }
 
 	virtual void SetUnit(const G4String& unit);
 
