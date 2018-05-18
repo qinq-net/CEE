@@ -33,6 +33,10 @@
 // Sensitive detectors
 #include <G4SDManager.hh>
 #include "T1TPCDigi.hh"
+// Electromagnetic field
+#include <G4UniformMagField.hh>
+#include <G4UniformElectricField.hh>
+#include <G4FieldManager.hh>
 
 using namespace std;
 
@@ -331,6 +335,11 @@ void T1DetectorConstruction::SetupDetectors()
 		T1TPCDigi* det = new T1TPCDigi(detName, depth);
 		G4SDManager::GetSDMpointer()->AddNewDetector(det);
 		CEE_TPC->logicTPC->SetSensitiveDetector(det);
+		// Magnetic Field
+		G4UniformMagField* field = new G4UniformMagField(
+			G4ThreeVector(0., 0., 10.*tesla));
+		G4FieldManager* fieldManager = new G4FieldManager(field);
+		CEE_TPC->logicTPC->SetFieldManager(fieldManager, TRUE);
 	}
 }
 
