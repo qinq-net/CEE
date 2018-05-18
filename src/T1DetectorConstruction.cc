@@ -345,6 +345,6 @@ void T1DetectorConstruction::SetupDetectors()
 
 void T1DetectorConstruction::SetupField()
 {
-	;
+	delete CEE_TPC;
 }
 	
