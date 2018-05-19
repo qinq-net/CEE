@@ -337,7 +337,7 @@ void T1DetectorConstruction::SetupDetectors()
 		CEE_TPC->logicTPC->SetSensitiveDetector(det);
 		// Magnetic Field
 		G4UniformMagField* field = new G4UniformMagField(
-			G4ThreeVector(0., 0., 10.*tesla));
+			G4ThreeVector(0., -10.*tesla, 0.));
 		G4FieldManager* fieldManager = new G4FieldManager(field);
 		CEE_TPC->logicTPC->SetFieldManager(fieldManager, TRUE);
 	}
