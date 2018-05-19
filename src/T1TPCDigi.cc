@@ -31,7 +31,7 @@ T1TPCDigi::T1TPCDigi(G4String name, G4int depth=0) : G4MultiFunctionalDetector(n
 	//this->RegisterPrimitive(primitive);
 	primitive = new CEEPSStep("stepScorer", depth);
 	this->RegisterPrimitive(primitive);
-	primitive = new CEEPSTPCScorer("TPCScorer", 16, 16, depth);
+	primitive = new CEEPSTPCScorer("TPCScorer", 256, 256, depth);
 	this->RegisterPrimitive(primitive);
 
 }
