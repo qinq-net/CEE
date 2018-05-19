@@ -25,12 +25,12 @@ typedef struct CEETPCIndex
 	}
 } CEETPCIndex;
 
-typedef std::map<CEETPCIndex, CEETPCData*> CEETPCDataMap;
+typedef std::map<CEETPCIndex, CEETPCData> CEETPCDataMap;
 
 class CEEPSTPCScorer: public G4VPrimitiveScorer
 {
 	public:
-	CEEPSTPCScorer(G4String name, G4int nX=16, G4int nZ=16, G4int depth=0);
+	CEEPSTPCScorer(G4String name, G4int nX=256, G4int nZ=256, G4int depth=0);
 	virtual ~CEEPSTPCScorer();
 
 	protected:

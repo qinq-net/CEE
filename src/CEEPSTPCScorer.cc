@@ -6,13 +6,13 @@
 #include <G4TouchableHistory.hh>
 
 
-CEEPSTPCScorer::CEEPSTPCScorer(G4String name, G4int nX, G4int nZ, G4int depth)
+CEEPSTPCScorer::CEEPSTPCScorer(G4String name, G4int nX_p, G4int nZ_p, G4int depth)
 	: G4VPrimitiveScorer(name, depth), HCID(-1), EvtMap(0),
 	transTouch(0.), rotTouch(), touchBox(0), sizeX(0.), sizeY(0.), sizeZ(0.),
 	lengthX(0.), lengthZ(0.), GeometryParametersLoaded(FALSE)
 {
-	this->nX=nX;
-	this->nZ=nZ;
+	this->nX=nX_p;
+	this->nZ=nZ_p;
 	this->depth=depth;
 }
 
@@ -60,6 +60,7 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
 	std::cout << "Position got: " << pX << " " << pZ << std::endl;
 
+	/*
 	if(!dataMap[{pX,pZ}])
 	{
 		dataMap[{pX,pZ}] = new CEETPCData({
@@ -70,6 +71,18 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	else
 	{
 		dataMap[{pX,pZ}]->energyDeposit += aStep->GetTotalEnergyDeposit();
+	}
+	*/
+	if(!dataMap.count({pX,pZ}))
+	{
+		dataMap[{pX,pZ}] = {
+			aStep->GetTotalEnergyDeposit(),
+			aStep->GetPostStepPoint()->GetGlobalTime(),
+			relativePosition.y()	};
+	}
+	else
+	{
+		dataMap[{pX,pZ}].energyDeposit += aStep->GetTotalEnergyDeposit();
 	}
 
 	std::cout << "data saved." << std::endl;
@@ -112,9 +125,9 @@ void CEEPSTPCScorer::PrintAll()
 		{
 			G4cout 	<< " >> Cell ix=" << cellItr.first.ix
 				<< " iz=" << cellItr.first.iz
-				<< " energyDeposit=" << cellItr.second->energyDeposit/MeV
-				<< "MeV startTime=" << cellItr.second->startTime/ns
-				<< "ns YPosition=" << cellItr.second->ZPosition/mm
+				<< " energyDeposit=" << cellItr.second.energyDeposit/MeV
+				<< "MeV startTime=" << cellItr.second.startTime/ns
+				<< "ns YPosition=" << cellItr.second.ZPosition/mm
 				<< "mm" << G4endl;
 		}
 	}
