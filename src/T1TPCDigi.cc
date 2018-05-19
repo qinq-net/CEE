@@ -12,6 +12,7 @@
 
 #include "CEEPSStartTime.hh"
 #include "CEEPSStep.hh"
+#include "CEEPSTPCScorer.hh"
 
 T1TPCDigi::T1TPCDigi(G4String name, G4int depth=0) : G4MultiFunctionalDetector(name)
 {
@@ -26,9 +27,11 @@ T1TPCDigi::T1TPCDigi(G4String name, G4int depth=0) : G4MultiFunctionalDetector(n
 
 	//primitive = new G4PSEnergyDeposit("eDep",depth);
 	//this->RegisterPrimitive(primitive);
-	primitive = new CEEPSStartTime("startTime",depth);
-	this->RegisterPrimitive(primitive);
+	//primitive = new CEEPSStartTime("startTime",depth);
+	//this->RegisterPrimitive(primitive);
 	primitive = new CEEPSStep("stepScorer", depth);
+	this->RegisterPrimitive(primitive);
+	primitive = new CEEPSTPCScorer("TPCScorer", 16, 16, depth);
 	this->RegisterPrimitive(primitive);
 
 }
