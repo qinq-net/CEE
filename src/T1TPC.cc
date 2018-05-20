@@ -136,7 +136,6 @@ T1TPC::T1TPC()
 
 
     ///读box数据，构建box
-    G4LogicalVolume* logicTPCbox;
     ReadLine(theFile,result);
     {
       G4double box_dx,box_dy,box_dz;
@@ -168,7 +167,7 @@ T1TPC::T1TPC()
       boxrot.rotateZ(box_eZ2*rad);
       G4Transform3D boxtrans(boxrot, boxp);
 
-      new G4PVPlacement(boxtrans,
+      physTPCbox = new G4PVPlacement(boxtrans,
                         logicTPCbox,            //its logical volume
                         nameTPC+"_box_"+nowboxid+"_phys",               //its name
                         logicTPC,                     //its mother  volume
@@ -178,7 +177,6 @@ T1TPC::T1TPC()
     }
 
     ///读TPCchamber
-    G4LogicalVolume* logicTPCboxchamber;
     string nowchamberid;
     ReadLine(theFile,result);
     {
@@ -210,7 +208,7 @@ T1TPC::T1TPC()
       boxrot.rotateZ(box_eZ2*rad);
       G4Transform3D boxtrans(boxrot, boxp);
 
-      new G4PVPlacement(boxtrans,
+      physTPCchamber = new G4PVPlacement(boxtrans,
                         logicTPCboxchamber,            //its logical volume
                         nameTPC+"_box_"+nowboxid+"_chamber_"+nowchamberid+"_phys",               //its name
                         logicTPCbox,                     //its mother  volume
