@@ -51,9 +51,9 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
 	std::cout << "Getting information for Track " << trackID << "to map " << reinterpret_cast<std::size_t>(&dataMap) << std::endl;
 	
-	G4ThreeVector stepPosition = aStep->GetPostStepPoint()->GetPosition();
+	G4ThreeVector stepPosition = aStep->GetPreStepPoint()->GetPosition();
 	//G4ThreeVector relativePosition = rotTouch->inverse() * ( stepPosition - transTouch );
-	G4ThreeVector relativePosition = aStep->GetPostStepPoint()->GetTouchable()->GetHistory()->GetTopTransform().TransformPoint(stepPosition);
+	G4ThreeVector relativePosition = aStep->GetPreStepPoint()->GetTouchable()->GetHistory()->GetTopTransform().TransformPoint(stepPosition);
 	// 分入不同的小室内
 	G4int pX = relativePosition.x()/lengthX;
 	G4int pZ = relativePosition.z()/lengthZ;
@@ -65,7 +65,7 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	{
 		dataMap[{pX,pZ}] = new CEETPCData({
 			aStep->GetTotalEnergyDeposit(),
-			aStep->GetPostStepPoint()->GetGlobalTime(),
+			aStep->GetPreStepPoint()->GetGlobalTime(),
 			relativePosition.y()	});
 	}
 	else
@@ -77,7 +77,7 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	{
 		dataMap[{pX,pZ}] = {
 			aStep->GetTotalEnergyDeposit(),
-			aStep->GetPostStepPoint()->GetGlobalTime(),
+			aStep->GetPreStepPoint()->GetGlobalTime(),
 			relativePosition.y()	};
 	}
 	else
