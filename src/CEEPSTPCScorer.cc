@@ -25,21 +25,21 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
 	if(!GeometryParametersLoaded)
 	{
-		std::cout << "Loading Geometry Parameters of TPC..." << std::endl;
+		//std::cout << "Loading Geometry Parameters of TPC..." << std::endl;
 		transTouch = aStep->GetPreStepPoint()->GetTouchable()->GetTranslation(depth);
-		std::cout << "Got Translation as " << transTouch.x() << "," << transTouch.y() << "," << transTouch.z();
+		//std::cout << "Got Translation as " << transTouch.x() << "," << transTouch.y() << "," << transTouch.z();
 		rotTouch = aStep->GetPreStepPoint()->GetTouchable()->GetRotation(depth);
-		std::cout << "Got Rotation as " << rotTouch << std::endl;
+		//std::cout << "Got Rotation as " << rotTouch << std::endl;
 
 		touchBox = dynamic_cast<G4Box*>(aStep->GetPreStepPoint()->GetTouchable()->GetSolid());
 		sizeX = touchBox->GetXHalfLength();
 		sizeY = touchBox->GetYHalfLength();
 		sizeZ = touchBox->GetZHalfLength();
-		std::cout << "Got Box as " << sizeX << "," << sizeY << "z" << sizeZ << std::endl;
+		//std::cout << "Got Box as " << sizeX << "," << sizeY << "z" << sizeZ << std::endl;
 
 		lengthX = 2. * sizeX / (G4double)nX;
 		lengthZ = 2. * sizeZ / (G4double)nZ;
-		std::cout << "Got length as " << lengthX << "," << lengthZ << std::endl;
+		//std::cout << "Got length as " << lengthX << "," << lengthZ << std::endl;
 		GeometryParametersLoaded = TRUE;
 	}
 	
@@ -49,7 +49,7 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	CEETPCDataMap& dataMap = *(*EvtMap->GetMap())[index];
 
 
-	std::cout << "Getting information for Track " << trackID << "to map " << reinterpret_cast<std::size_t>(&dataMap) << std::endl;
+	//std::cout << "Getting information for Track " << trackID << "to map " << reinterpret_cast<std::size_t>(&dataMap) << std::endl;
 	
 	G4ThreeVector stepPosition = aStep->GetPreStepPoint()->GetPosition();
 	//G4ThreeVector relativePosition = rotTouch->inverse() * ( stepPosition - transTouch );
@@ -58,7 +58,7 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	G4int pX = relativePosition.x()/lengthX;
 	G4int pZ = relativePosition.z()/lengthZ;
 
-	std::cout << "Position got: " << pX << " " << pZ << std::endl;
+	//std::cout << "Position got: " << pX << " " << pZ << std::endl;
 
 	/*
 	if(!dataMap[{pX,pZ}])
@@ -85,7 +85,7 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 		dataMap[{pX,pZ}].energyDeposit += aStep->GetTotalEnergyDeposit();
 	}
 
-	std::cout << "data saved." << std::endl;
+	//std::cout << "data saved." << std::endl;
 
 	return TRUE;
 }
@@ -99,7 +99,7 @@ void CEEPSTPCScorer::Initialize(G4HCofThisEvent* HCE)
 
 void CEEPSTPCScorer::EndOfEvent(G4HCofThisEvent*)
 {
-	PrintAll();
+	;
 }
 
 void CEEPSTPCScorer::clear()

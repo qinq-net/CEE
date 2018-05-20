@@ -60,7 +60,7 @@ void CEEPSStep::Initialize(G4HCofThisEvent* HCE)
 
 void CEEPSStep::EndOfEvent(G4HCofThisEvent*)
 {
-	PrintAll();
+	;
 }
 
 void CEEPSStep::clear()
