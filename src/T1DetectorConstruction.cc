@@ -334,7 +334,8 @@ void T1DetectorConstruction::SetupDetectors()
 		G4int depth = 0;
 		T1TPCDigi* det = new T1TPCDigi(detName, depth);
 		G4SDManager::GetSDMpointer()->AddNewDetector(det);
-		CEE_TPC->logicTPC->SetSensitiveDetector(det);
+		for(auto itr: CEE_TPC->GetSensitiveLVs())
+			itr->SetSensitiveDetector(det);
 		// Magnetic Field
 		G4UniformMagField* field = new G4UniformMagField(
 			G4ThreeVector(0., -10.*tesla, 0.));

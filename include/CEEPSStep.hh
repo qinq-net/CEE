@@ -9,6 +9,7 @@
 typedef struct
 {
 	G4int trackID;
+	G4int stepID;
 	G4double time;
 	G4ThreeVector position;
 	G4double deltaEnergy;

@@ -23,6 +23,7 @@ CEEPSStep::~CEEPSStep()
 G4bool CEEPSStep::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
 	G4int trackID = aStep->GetTrack()->GetTrackID();
+	G4int stepID = aStep->GetTrack()->GetCurrentStepNumber();
 	if(!(onlymain) || aStep->GetTrack()->GetTrackID() == 1)
 	{
 		//G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
@@ -33,6 +34,7 @@ G4bool CEEPSStep::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 		G4double energyDeposit = aStep->GetTotalEnergyDeposit();
 		CEEStepData* stepData = new CEEStepData({
 			trackID,
+			stepID,
 			//preStepPoint,
 			//postStepPoint,
 			time,
@@ -82,7 +84,8 @@ void CEEPSStep::PrintAll()
 		G4cout 	<< " >   copy no.: " << copyItr.first << G4endl;
 		for(auto trackItr: *copyItr.second)
 		{
-			G4cout 	<< " >> TID=" << trackItr->trackID
+			G4cout 	<< " >> tID=" << trackItr->trackID
+				<< " sID=" << trackItr->stepID
 				<< " t=" << trackItr->time/ns
 				<< "ns x=" << trackItr->position.x()/mm
 				<< "mm y=" << trackItr->position.y()/mm
