@@ -8,7 +8,7 @@
 
 CEEPSTPCScorer::CEEPSTPCScorer(G4String name, G4int nX_p, G4int nZ_p, G4int depth)
 	: G4VPrimitiveScorer(name, depth), HCID(-1), EvtMap(0),
-	transTouch(0.), rotTouch(), touchBox(0), sizeX(0.), sizeY(0.), sizeZ(0.),
+	touchBox(0), sizeX(0.), sizeY(0.), sizeZ(0.),
 	lengthX(0.), lengthZ(0.), GeometryParametersLoaded(FALSE)
 {
 	this->nX=nX_p;
@@ -26,9 +26,9 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	if(!GeometryParametersLoaded)
 	{
 		//std::cout << "Loading Geometry Parameters of TPC..." << std::endl;
-		transTouch = aStep->GetPreStepPoint()->GetTouchable()->GetTranslation(depth);
+		//transTouch = aStep->GetPreStepPoint()->GetTouchable()->GetTranslation(depth);
 		//std::cout << "Got Translation as " << transTouch.x() << "," << transTouch.y() << "," << transTouch.z();
-		rotTouch = aStep->GetPreStepPoint()->GetTouchable()->GetRotation(depth);
+		//rotTouch = aStep->GetPreStepPoint()->GetTouchable()->GetRotation(depth);
 		//std::cout << "Got Rotation as " << rotTouch << std::endl;
 
 		touchBox = dynamic_cast<G4Box*>(aStep->GetPreStepPoint()->GetTouchable()->GetSolid());
@@ -56,23 +56,12 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	G4ThreeVector relativePosition = aStep->GetPreStepPoint()->GetTouchable()->GetHistory()->GetTopTransform().TransformPoint(stepPosition);
 	// 分入不同的小室内
 	G4int pX = relativePosition.x()/lengthX;
+	G4double pY = relativePosition.y();
 	G4int pZ = relativePosition.z()/lengthZ;
 
 	//std::cout << "Position got: " << pX << " " << pZ << std::endl;
 
 	/*
-	if(!dataMap[{pX,pZ}])
-	{
-		dataMap[{pX,pZ}] = new CEETPCData({
-			aStep->GetTotalEnergyDeposit(),
-			aStep->GetPreStepPoint()->GetGlobalTime(),
-			relativePosition.y()	});
-	}
-	else
-	{
-		dataMap[{pX,pZ}]->energyDeposit += aStep->GetTotalEnergyDeposit();
-	}
-	*/
 	if(!dataMap.count({pX,pZ}))
 	{
 		dataMap[{pX,pZ}] = {
@@ -83,6 +72,25 @@ G4bool CEEPSTPCScorer::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 	else
 	{
 		dataMap[{pX,pZ}].energyDeposit += aStep->GetTotalEnergyDeposit();
+	}
+	*/
+	// Is An Electron
+	if(aStep->GetTrack()->GetParticleDefinition()->GetParticleName() == "e-")
+	{
+		// Exiting TPC, Delete Entry
+		if(aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary)
+		{
+			dataMap.erase(trackID);
+		}
+		else // Inside the TPC, Create Entry
+		{
+			dataMap[trackID] =
+			{
+				{ pX, pZ }, // Cell of Step
+				pY, // horizonal position of Step
+				aStep->GetPreStepPoint()->GetGlobalTime()
+			};
+		}
 	}
 
 	//std::cout << "data saved." << std::endl;
@@ -117,7 +125,8 @@ void CEEPSTPCScorer::PrintAll()
 {
 	G4cout << ">> MultiFunctionalDet  " << detector->GetName() << G4endl;
 	G4cout << ">> PrimitiveScorer " << GetName() << G4endl;
-	G4cout << ">> Number of entries " << EvtMap->entries() << G4endl;
+	G4cout << ">> Number of copies " << EvtMap->entries() << G4endl;
+	/*
 	for(auto copyItr: *(EvtMap->GetMap()))
 	{
 		G4cout 	<< " >   copy no.: " << copyItr.first << G4endl;
@@ -129,6 +138,46 @@ void CEEPSTPCScorer::PrintAll()
 				<< "MeV startTime=" << cellItr.second.startTime/ns
 				<< "ns YPosition=" << cellItr.second.ZPosition/mm
 				<< "mm" << G4endl;
+		}
+	}
+	*/
+	G4cout << ">> Cell Length: lengthX=" << lengthX/mm
+		<< "mm, lengthZ=" << lengthZ/mm
+		<< "mm" << G4endl;
+	for(auto copyItr: *(EvtMap->GetMap()))
+	{
+		G4cout << " >   copy no.: " << copyItr.first << G4endl;
+		G4cout << " >   Number of entries " << copyItr.second->size()
+			<< G4endl;
+		std::map<std::pair<G4int,G4int>, std::pair<G4int,G4double>> cellMap;
+		for(auto trackItr: *copyItr.second)
+		{
+			G4int trackID=trackItr.first;
+			G4int cellX=trackItr.second.XZPosition.first;
+			G4int cellZ=trackItr.second.XZPosition.second;
+			G4double positionY=trackItr.second.YPosition;
+			G4double Time=trackItr.second.Time;
+			G4double SignalTime = Time;// TODO: calculate Time+positionY
+			G4cout << " >> TrackID=" << trackID
+				<< " CellXZ={" << cellX
+				<< "," << cellZ
+				<< "} positionY=" << positionY/mm
+				<< "mm Time=" << Time/ns
+				<< "ns" << G4endl;
+			// modify cellMap entry
+			if(!cellMap.count({cellX,cellZ}))
+				cellMap[{cellX,cellZ}].second=SignalTime;
+			cellMap[{cellX,cellZ}].first+=1;
+			if(SignalTime<cellMap[{cellX,cellZ}].second)
+				cellMap[{cellX,cellZ}].second=SignalTime;
+		}
+		for(auto cellItr: cellMap)
+		{
+			G4cout << " >>> Cell:{" << cellItr.first.first
+				<< "," << cellItr.first.second
+				<< "} ElectronCount=" << cellItr.second.first
+				<< " SignalTime=" << cellItr.second.second/ns
+				<< "ns" << G4endl;
 		}
 	}
 }

@@ -8,14 +8,16 @@
 #include "T1TPC.hh"
 
 /* A struct used to save energy deposit and other things */
-typedef struct
+/*typedef struct
 {
 	G4double energyDeposit;
 	G4double startTime;
 	G4double ZPosition;
-} CEETPCData;
+} CEETPCData;*/
+//typedef std::map<G4int,std::pair<G4double,G4double>> CEETPCData
+//// key: TrackID content: {Time, YPosition}
 
-typedef struct CEETPCIndex
+/*typedef struct CEETPCIndex
 {
 	G4int ix;
 	G4int iz;
@@ -23,7 +25,14 @@ typedef struct CEETPCIndex
 	{
 		return ((this->ix)<right.ix)||((this->iz)<right.iz);
 	}
-} CEETPCIndex;
+} CEETPCIndex;*/
+typedef G4int CEETPCIndex;// TrackID
+typedef struct
+{
+	std::pair<G4int,G4int> XZPosition;
+	G4double YPosition;
+	G4double Time;
+} CEETPCData;
 
 typedef std::map<CEETPCIndex, CEETPCData> CEETPCDataMap;
 
@@ -49,8 +58,8 @@ class CEEPSTPCScorer: public G4VPrimitiveScorer
 	G4THitsMap<CEETPCDataMap>* EvtMap;
 	G4double depth;
 
-	G4ThreeVector transTouch;
-	const G4RotationMatrix* rotTouch;
+	//G4ThreeVector transTouch;
+	//const G4RotationMatrix* rotTouch;
 	G4Box* touchBox;
 	G4double sizeX, sizeY, sizeZ;
 	G4int nX, nZ;
