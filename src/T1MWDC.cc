@@ -95,7 +95,7 @@ void T1MWDC::T1MWDC_0(int MWDC_id)
   ///循环读box
   for(int i=0;i<numofbox;i++){
     ///读boxid
-    string nowboxid;
+    G4String nowboxid;
     ReadLine(theFile,result);
     {
       nowboxid=result[0];
@@ -103,7 +103,7 @@ void T1MWDC::T1MWDC_0(int MWDC_id)
 
 
     ///读box数据，构建box
-    G4LogicalVolume* logicMWDCbox;
+    //G4LogicalVolume* logicMWDCbox;
     ReadLine(theFile,result);
     {
       G4double box_dx,box_dy,box_dz;
@@ -124,8 +124,8 @@ void T1MWDC::T1MWDC_0(int MWDC_id)
       G4Box* solidMWDCbox = new G4Box(nameMWDC+"_box_"+nowboxid+"_solid",0.5*box_dx*mm,0.5*box_dy*mm,0.5*box_dz*mm);
       G4Material* matMWDCbox = nist->FindOrBuildMaterial("G4_AIR");                /////gai
       G4VisAttributes* visMWDCbox = new G4VisAttributes(G4Colour(0.2,0.9,0.2,0));  /////gai
-      logicMWDCbox = new G4LogicalVolume(solidMWDCbox,matMWDCbox,nameMWDC+"_box_"+nowboxid+"_logic");
-      logicMWDCbox -> SetVisAttributes(visMWDCbox);
+      logicMWDCbox[MWDC_id-1][nowboxid] = new G4LogicalVolume(solidMWDCbox,matMWDCbox,nameMWDC+"_box_"+nowboxid+"_logic");
+      logicMWDCbox[MWDC_id-1][nowboxid] -> SetVisAttributes(visMWDCbox);
 
 
       G4ThreeVector boxp(box_px*mm,box_py*mm,box_pz*mm);
@@ -136,7 +136,7 @@ void T1MWDC::T1MWDC_0(int MWDC_id)
       G4Transform3D boxtrans(boxrot, boxp);
 
       new G4PVPlacement(boxtrans,
-                        logicMWDCbox,            //its logical volume
+                        logicMWDCbox[MWDC_id-1][nowboxid],            //its logical volume
                         nameMWDC+"_box_"+nowboxid+"_phys",               //its name
                         logicMWDC[MWDC_id-1],                     //its mother  volume
                         false,                 //no boolean operation
@@ -146,8 +146,8 @@ void T1MWDC::T1MWDC_0(int MWDC_id)
 
     {
       ///读MRPC数据，构建MRPC(MRPCbox)
-      G4LogicalVolume* logicMWDCboxChamber;
-      string MWDCChamberid;
+      //G4LogicalVolume* logicMWDCboxChamber;
+      G4String MWDCChamberid;
       ReadLine(theFile,result);
       {
         G4double box_dx,box_dy,box_dz;
@@ -169,8 +169,8 @@ void T1MWDC::T1MWDC_0(int MWDC_id)
         G4Box* solidMWDCboxMRPC = new G4Box(nameMWDC+"_box_"+nowboxid+"_MRPC_"+MWDCChamberid+"_solid",0.5*box_dx*mm,0.5*box_dy*mm,0.5*box_dz*mm);
         G4Material* matMWDCboxMRPC = nist->FindOrBuildMaterial("G4_AIR");                /////gai
         G4VisAttributes* visMWDCboxMRPC = new G4VisAttributes(G4Colour(0.2,0.9,0.2,0.5));  /////gai
-        logicMWDCboxChamber = new G4LogicalVolume(solidMWDCboxMRPC,matMWDCboxMRPC,nameMWDC+"_box_"+nowboxid+"_MRPC_"+MWDCChamberid+"_logic");
-        logicMWDCboxChamber -> SetVisAttributes(visMWDCboxMRPC);
+        logicMWDCboxChamber[MWDC_id-1][nowboxid+":"+MWDCChamberid] = new G4LogicalVolume(solidMWDCboxMRPC,matMWDCboxMRPC,nameMWDC+"_box_"+nowboxid+"_MRPC_"+MWDCChamberid+"_logic");
+        logicMWDCboxChamber[MWDC_id-1][nowboxid+":"+MWDCChamberid] -> SetVisAttributes(visMWDCboxMRPC);
 
         G4ThreeVector boxp(box_px*mm,box_py*mm,box_pz*mm);
         G4RotationMatrix boxrot;
@@ -180,9 +180,9 @@ void T1MWDC::T1MWDC_0(int MWDC_id)
         G4Transform3D boxtrans(boxrot, boxp);
 
         new G4PVPlacement(boxtrans,
-                          logicMWDCboxChamber,            //its logical volume
+                          logicMWDCboxChamber[MWDC_id-1][nowboxid+":"+MWDCChamberid],            //its logical volume
                           nameMWDC+"_box_"+nowboxid+"_MRPC_"+MWDCChamberid+"_phys",               //its name
-                          logicMWDCbox,                     //its mother  volume
+                          logicMWDCbox[MWDC_id-1][nowboxid],                     //its mother  volume
                           false,                 //no boolean operation
                           0,                     //copy number
                           checkOverlaps);        //overlaps checking
