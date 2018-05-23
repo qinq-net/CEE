@@ -141,6 +141,10 @@ void CEEPSTPCScorer::PrintAll()
 		}
 	}
 	*/
+	G4cout << ">> TPC Size: sizeX=" << sizeX/mm
+		<< "mm sizeY=" << sizeY/mm
+		<< "mm sizeZ=" << sizeZ/mm
+		<< "mm" << G4endl;
 	G4cout << ">> Cell Length: lengthX=" << lengthX/mm
 		<< "mm, lengthZ=" << lengthZ/mm
 		<< "mm" << G4endl;
@@ -157,7 +161,7 @@ void CEEPSTPCScorer::PrintAll()
 			G4int cellZ=trackItr.second.XZPosition.second;
 			G4double positionY=trackItr.second.YPosition;
 			G4double Time=trackItr.second.Time;
-			G4double SignalTime = Time;// TODO: calculate Time+positionY
+			G4double SignalTime = Time + (sizeY - positionY)/(5*cm/us);
 			G4cout << " >> TrackID=" << trackID
 				<< " CellXZ={" << cellX
 				<< "," << cellZ
