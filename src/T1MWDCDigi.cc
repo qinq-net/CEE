@@ -9,12 +9,13 @@
 #include <G4PSMinKinEAtGeneration.hh>
 #include <G4PSTrackLength.hh>
 #include <G4PSNofStep.hh>
+#include <G4SystemOfUnits.hh>
 
 #include "CEEPSStartTime.hh"
 #include "CEEPSStep.hh"
-//#include "CEEPSMWDCScorer.hh"
+#include "CEEPSMWDCScorer.hh"
 
-T1MWDCDigi::T1MWDCDigi(G4String name, G4int depth=0) : G4MultiFunctionalDetector(name)
+T1MWDCDigi::T1MWDCDigi(G4String name, G4int depth=2) : G4MultiFunctionalDetector(name)
 {
 	/* Register primitives on construction
 	 *
@@ -31,8 +32,8 @@ T1MWDCDigi::T1MWDCDigi(G4String name, G4int depth=0) : G4MultiFunctionalDetector
 	//this->RegisterPrimitive(primitive);
 	primitive = new CEEPSStep("stepScorer", depth);
 	this->RegisterPrimitive(primitive);
-	//primitive = new CEEPSMWDCScorer("MWDCScorer", 256, 256, depth);
-	//this->RegisterPrimitive(primitive);
+	primitive = new CEEPSMWDCScorer("MWDCScorer", 2.*mm, 40.*mm, depth);
+	this->RegisterPrimitive(primitive);
 
 }
 
