@@ -33,6 +33,7 @@
 // Sensitive detectors
 #include <G4SDManager.hh>
 #include "T1TPCDigi.hh"
+#include "T1MWDCDigi.hh"
 // Electromagnetic field
 #include <G4UniformMagField.hh>
 #include <G4UniformElectricField.hh>
@@ -51,7 +52,10 @@ T1DetectorConstruction::T1DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 T1DetectorConstruction::~T1DetectorConstruction()
-{ }
+{
+	delete CEE_TPC;
+	delete CEE_MWDC;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -252,10 +256,10 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 //
 // CEE_MWDC
 //
-  T1MWDC CEE_MWDC;
+  CEE_MWDC=new T1MWDC();
   for(int id=1;id<=6;id++){
-    new G4PVPlacement(CEE_MWDC.transMWDC[id-1],
-                      CEE_MWDC.logicMWDC[id-1],            //its logical volume
+    new G4PVPlacement(CEE_MWDC->transMWDC[id-1],
+                      CEE_MWDC->logicMWDC[id-1],            //its logical volume
                       "CEE_MWDC"+to_string(id)+"_phys",               //its name
                       CEE_world_logic,                     //its mother  volume
                       false,                 //no boolean operation
@@ -338,14 +342,26 @@ void T1DetectorConstruction::SetupDetectors()
 			itr->SetSensitiveDetector(det);
 		// Magnetic Field
 		G4UniformMagField* field = new G4UniformMagField(
-			G4ThreeVector(0., -10.*tesla, 0.));
+			G4ThreeVector(0., -0.5*tesla, 0.));
 		G4FieldManager* fieldManager = new G4FieldManager(field);
 		CEE_TPC->logicTPC->SetFieldManager(fieldManager, TRUE);
+	}
+	// MWDC
+	{
+		for(int MWDC_id=1; MWDC_id<=6; MWDC_id++)
+		{
+			std::cerr << "Setting SD for MWDC" << MWDC_id << std::endl;
+			G4String detName = CEE_MWDC->logicMWDC[MWDC_id-1]->GetName()+"_det";
+			G4int depth=2;
+			T1MWDCDigi* det = new T1MWDCDigi(detName, depth);
+			G4SDManager::GetSDMpointer()->AddNewDetector(det);
+			for(auto itr: CEE_MWDC->GetSensitiveLVs(MWDC_id))
+				itr->SetSensitiveDetector(det);
+			// No field will be built
+		}
 	}
 }
 
 void T1DetectorConstruction::SetupField()
 {
-	delete CEE_TPC;
 }
-	
