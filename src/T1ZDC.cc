@@ -222,7 +222,7 @@ T1ZDC::T1ZDC()
           logicZDCboxTowerceng -> SetVisAttributes(visZDCboxTowerceng);
 
           if(!(k%2))// 灵敏区为10mm的铅，每个模块先构建铅再构建闪烁体
-                sensLVs.push_back(logicZDCboxTowerceng);
+                sensLVs[nowTowerid].push_back(logicZDCboxTowerceng);
 
           G4ThreeVector boxp(box_px*mm,box_py*mm,box_pz*mm);
           G4RotationMatrix boxrot;
