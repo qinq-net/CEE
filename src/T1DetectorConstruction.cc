@@ -34,10 +34,14 @@
 #include <G4SDManager.hh>
 #include "T1TPCDigi.hh"
 #include "T1MWDCDigi.hh"
+#include <G4MultiFunctionalDetector.hh>
+#include <G4PSEnergyDeposit.hh>
 // Electromagnetic field
 #include <G4UniformMagField.hh>
 #include <G4UniformElectricField.hh>
 #include <G4FieldManager.hh>
+
+std::vector<G4String> CEEZDCTowerIDs;
 
 using namespace std;
 
@@ -55,6 +59,7 @@ T1DetectorConstruction::~T1DetectorConstruction()
 {
 	delete CEE_TPC;
 	delete CEE_MWDC;
+	delete CEE_ZDC;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -242,9 +247,9 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 //
 // CEE_ZDC
 //
-  T1ZDC CEE_ZDC;
-  new G4PVPlacement(CEE_ZDC.transZDC,
-                    CEE_ZDC.logicZDC,            //its logical volume
+  CEE_ZDC=new T1ZDC();
+  new G4PVPlacement(CEE_ZDC->transZDC,
+                    CEE_ZDC->logicZDC,            //its logical volume
                     "CEE_ZDC_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
@@ -352,12 +357,30 @@ void T1DetectorConstruction::SetupDetectors()
 		{
 			std::cerr << "Setting SD for MWDC" << MWDC_id << std::endl;
 			G4String detName = CEE_MWDC->logicMWDC[MWDC_id-1]->GetName()+"_det";
+			std::cerr << "CEE_MWDC " << detName << std::endl;
 			G4int depth=2;
 			T1MWDCDigi* det = new T1MWDCDigi(detName, depth);
 			G4SDManager::GetSDMpointer()->AddNewDetector(det);
 			for(auto itr: CEE_MWDC->GetSensitiveLVs(MWDC_id))
 				itr->SetSensitiveDetector(det);
 			// No field will be built
+		}
+	}
+	// ZDC
+	{
+		G4int depth=3;
+		CEEZDCTowerIDs.clear();
+		for(auto towerItr: CEE_ZDC->GetSensitiveLVs())
+		{
+			G4String detName = "CEE_ZDC_Tower_"+towerItr.first+"_det";
+			CEEZDCTowerIDs.push_back(towerItr.first);
+			std::cerr << detName << std::endl;
+			G4MultiFunctionalDetector* det=new G4MultiFunctionalDetector(detName);
+			G4PSEnergyDeposit* primitive=new G4PSEnergyDeposit("energyDeposit", "MeV", depth);
+			det->RegisterPrimitive(primitive);
+			G4SDManager::GetSDMpointer()->AddNewDetector(det);
+			for(auto layerItr: towerItr.second)
+				layerItr->SetSensitiveDetector(det);
 		}
 	}
 }

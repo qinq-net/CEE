@@ -11,6 +11,7 @@
 #include "T1MWDCDigi.hh"
 #include "CEEEventLoggingSession.hh"
 #include <G4UImanager.hh>
+#include <G4THitsMap.hh>
 
 #include <fstream>
 using namespace std;
@@ -54,7 +55,7 @@ template<class SDType> inline G4bool PrintMultiPrimitive(SDType* det)
 	}
 	return TRUE;
 }
-
+extern std::vector<G4String> CEEZDCTowerIDs;
 void T1EventAction::EndOfEventAction(const G4Event* evt)
 {
 	G4cout << " >>> End of Event " << evt->GetEventID() << G4endl;
@@ -85,6 +86,14 @@ void T1EventAction::EndOfEventAction(const G4Event* evt)
 			{
 				T1MWDCDigi* mwdcDigi = dynamic_cast<T1MWDCDigi*>(SDMan->FindSensitiveDetector("CEE_MWDC"+std::to_string(MWDC_id)+"_logic_det"));
 				PrintMultiPrimitive<T1MWDCDigi>(mwdcDigi);
+			}
+			//ZDC
+			G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+			for(auto towerID: CEEZDCTowerIDs)
+			{
+				G4MultiFunctionalDetector* zdcDigi = dynamic_cast<G4MultiFunctionalDetector*>(SDMan->FindSensitiveDetector("CEE_ZDC_Tower_"+towerID+"_det"));
+				if(((G4THitsMap<G4double>*)(HCE->GetHC(zdcDigi->GetPrimitive(0)->GetCollectionID(0))))->entries())
+					PrintMultiPrimitive<G4MultiFunctionalDetector>(zdcDigi);
 			}
 			// relocating G4cout back to screen
 			if(UI) UI->SetCoutDestination(oldSession);

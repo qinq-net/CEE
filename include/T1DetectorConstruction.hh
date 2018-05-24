@@ -5,6 +5,7 @@
 #include "globals.hh"
 #include "T1TPC.hh"
 #include "T1MWDC.hh"
+#include "T1ZDC.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -28,6 +29,7 @@ class T1DetectorConstruction : public G4VUserDetectorConstruction
   private:
     T1TPC* CEE_TPC;
     T1MWDC* CEE_MWDC;
+    T1ZDC* CEE_ZDC;
     virtual void SetupDetectors();
     virtual void SetupField();
 };
