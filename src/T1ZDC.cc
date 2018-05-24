@@ -38,7 +38,7 @@ void line_out_(ofstream& outFile, double var)
 
 T1ZDC::T1ZDC()
 {
-
+  sensLVs.clear();
   T1ZDC_exampledata();
 
   fstream theFile;  //   ifstream theFile;
@@ -220,6 +220,9 @@ T1ZDC::T1ZDC()
           /////gai
           G4LogicalVolume* logicZDCboxTowerceng = new G4LogicalVolume(solidZDCboxTowerceng,matZDCboxTowerceng,nameZDC+"_box_"+nowboxid+"_Tower_"+nowTowerid+"_ceng_"+cengid+"_logic");
           logicZDCboxTowerceng -> SetVisAttributes(visZDCboxTowerceng);
+
+          if(!(k%2))// 灵敏区为10mm的铅，每个模块先构建铅再构建闪烁体
+                sensLVs[nowTowerid].push_back(logicZDCboxTowerceng);
 
           G4ThreeVector boxp(box_px*mm,box_py*mm,box_pz*mm);
           G4RotationMatrix boxrot;

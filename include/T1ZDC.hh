@@ -24,6 +24,13 @@ class T1ZDC
 
     G4LogicalVolume* logicZDC;
     G4Transform3D transZDC;
+  private:
+    std::map<G4String, std::vector<G4LogicalVolume*>> sensLVs;
+  public:
+    inline std::vector<G4LogicalVolume*> GetSensitiveLVs(G4String towerID)
+    { return sensLVs[towerID]; }
+    inline std::map<G4String, std::vector<G4LogicalVolume*>> GetSensitiveLVs()
+    { return sensLVs; }
 };
 
 
