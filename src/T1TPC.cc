@@ -200,6 +200,7 @@ T1TPC::T1TPC()
       G4VisAttributes* visTPCboxchamber = new G4VisAttributes(G4Colour(0.1,0.8,0.2,0.5));  /////gai
       logicTPCboxchamber = new G4LogicalVolume(solidTPCboxchamber,matTPCboxchamber,nameTPC+"_box_"+nowboxid+"_chamber_"+nowchamberid+"_logic");
       logicTPCboxchamber -> SetVisAttributes(visTPCboxchamber);
+      SLVList.push_back(logicTPCboxchamber);
 
       G4ThreeVector boxp(box_px*mm,box_py*mm,box_pz*mm);
       G4RotationMatrix boxrot;
