@@ -30,10 +30,10 @@ class T1TPC
     G4PVPlacement* physTPCbox;
     G4PVPlacement* physTPCchamber;
     std::vector<G4LogicalVolume*> SLVList;
-    
+
 
   public:
-    inline std::vector<G4LogicalVolume*> GetSensitiveLVs()
+    inline std::vector<G4LogicalVolume*> GetSensitiveLVs(G4int id=0)
     {
       return SLVList;
     }
