@@ -178,7 +178,7 @@ void T1iTOF::T1iTOF_0(int iTOF_id)
         G4VisAttributes* visiTOFboxMRPC = new G4VisAttributes(G4Colour(0.1,0.8,1.1,0));  /////gai
         logiciTOFboxMRPC = new G4LogicalVolume(solidiTOFboxMRPC,matiTOFboxMRPC,nameiTOF+"_box_"+nowboxid+"_MRPC_"+nowMRPCid+"_logic");
         logiciTOFboxMRPC -> SetVisAttributes(visiTOFboxMRPC);
-        SLVList.push_back(logiciTOFboxMRPC);
+        SLVList[iTOF_id-1].push_back(logiciTOFboxMRPC);
 
         G4ThreeVector boxp(box_px*mm,box_py*mm,box_pz*mm);
         G4RotationMatrix boxrot;

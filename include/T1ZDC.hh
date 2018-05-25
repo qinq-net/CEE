@@ -24,6 +24,15 @@ class T1ZDC
 
     G4LogicalVolume* logicZDC;
     G4Transform3D transZDC;
+
+  private:
+    std::vector<G4LogicalVolume*> SLVList;
+
+  public:
+    inline std::vector<G4LogicalVolume*> GetSensitiveLVs(G4int id=0)
+    {
+      return SLVList;
+    }
 };
 
 

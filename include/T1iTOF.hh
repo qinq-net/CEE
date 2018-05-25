@@ -26,12 +26,12 @@ class T1iTOF
     G4Transform3D transiTOF[2];
 
   private:
-    std::vector<G4LogicalVolume*> SLVList;
+    std::vector<G4LogicalVolume*> SLVList[2];
 
   public:
-    inline std::vector<G4LogicalVolume*> GetSensitiveLVs()
+    inline std::vector<G4LogicalVolume*> GetSensitiveLVs(G4int id=0)
     {
-      return SLVList;
+      return SLVList[id];
     }
 };
 

@@ -220,6 +220,7 @@ T1ZDC::T1ZDC()
           /////gai
           G4LogicalVolume* logicZDCboxTowerceng = new G4LogicalVolume(solidZDCboxTowerceng,matZDCboxTowerceng,nameZDC+"_box_"+nowboxid+"_Tower_"+nowTowerid+"_ceng_"+cengid+"_logic");
           logicZDCboxTowerceng -> SetVisAttributes(visZDCboxTowerceng);
+          SLVList.push_back(logicZDCboxTowerceng);
 
           G4ThreeVector boxp(box_px*mm,box_py*mm,box_pz*mm);
           G4RotationMatrix boxrot;
