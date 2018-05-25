@@ -238,7 +238,7 @@ void T1MWDC::T1MWDC_exampledata(int MWDC_id)
   MWDC_px = r0*sin(phi_r);
   MWDC_py = 0;
   MWDC_pz = r0*cos(phi_r);
-  MWDC_dx = fabs(2*r0*sin(phi_r)-200);
+  MWDC_dx = fabs(2*r0*sin(phi_r))-200;
   MWDC_dy = 1000;
   MWDC_dz = 100;
   MWDC_eZ1 = 0;

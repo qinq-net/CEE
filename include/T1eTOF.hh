@@ -24,6 +24,15 @@ class T1eTOF
 
     G4LogicalVolume* logiceTOF[2];
     G4Transform3D transeTOF[2];
+    
+  private:
+    std::vector<G4LogicalVolume*> SLVList;
+
+  public:
+    inline std::vector<G4LogicalVolume*> GetSensitiveLVs()
+    {
+      return SLVList;
+    }
 };
 
 
