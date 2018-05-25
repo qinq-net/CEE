@@ -6,6 +6,9 @@
 #include "T1TPC.hh"
 #include "T1MWDC.hh"
 #include "T1ZDC.hh"
+#include "T1T0.hh"
+#include "T1iTOF.hh"
+#include "T1eTOF.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -30,6 +33,9 @@ class T1DetectorConstruction : public G4VUserDetectorConstruction
     T1TPC* CEE_TPC;
     T1MWDC* CEE_MWDC;
     T1ZDC* CEE_ZDC;
+    T1T0* CEE_T0;
+    T1iTOF* CEE_iTOF;
+    T1eTOF* CEE_eTOF;
     virtual void SetupDetectors();
     virtual void SetupField();
 };

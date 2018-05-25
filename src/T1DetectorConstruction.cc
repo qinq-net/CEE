@@ -34,6 +34,7 @@
 #include <G4SDManager.hh>
 #include "T1TPCDigi.hh"
 #include "T1MWDCDigi.hh"
+#include "T1MRPCDigi.hh"
 #include <G4MultiFunctionalDetector.hh>
 #include <G4PSEnergyDeposit.hh>
 // Electromagnetic field
@@ -174,9 +175,9 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 //
 
 
-  T1T0 CEE_T0;
-  new G4PVPlacement(CEE_T0.transT0,
-                    CEE_T0.logicT0,            //its logical volume
+  CEE_T0 = new T1T0();
+  new G4PVPlacement(CEE_T0->transT0,
+                    CEE_T0->logicT0,            //its logical volume
                     "CEE_T0_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
@@ -203,17 +204,17 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 // CEE_iTOF
 //
 
-  T1iTOF CEE_iTOF;
-  new G4PVPlacement(CEE_iTOF.transiTOF[0],
-                    CEE_iTOF.logiciTOF[0],            //its logical volume
+  CEE_iTOF = new T1iTOF();
+  new G4PVPlacement(CEE_iTOF->transiTOF[0],
+                    CEE_iTOF->logiciTOF[0],            //its logical volume
                     "CEE_iTOF1_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
                     0,                     //copy number
                     checkOverlaps);        //overlaps checking
   //
-  new G4PVPlacement(CEE_iTOF.transiTOF[1],
-                    CEE_iTOF.logiciTOF[1],            //its logical volume
+  new G4PVPlacement(CEE_iTOF->transiTOF[1],
+                    CEE_iTOF->logiciTOF[1],            //its logical volume
                     "CEE_iTOF2_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
@@ -225,17 +226,17 @@ CEE_Pix_logic -> SetVisAttributes(CEE_Pix_Vis);
 //
 // CEE_eTOF
 //
-  T1eTOF CEE_eTOF;
-  new G4PVPlacement(CEE_eTOF.transeTOF[0],
-                    CEE_eTOF.logiceTOF[0],            //its logical volume
+  CEE_eTOF = new T1eTOF();
+  new G4PVPlacement(CEE_eTOF->transeTOF[0],
+                    CEE_eTOF->logiceTOF[0],            //its logical volume
                     "CEE_eTOF1_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
                     0,                     //copy number
                     checkOverlaps);        //overlaps checking
   //
-  new G4PVPlacement(CEE_eTOF.transeTOF[1],
-                    CEE_eTOF.logiceTOF[1],            //its logical volume
+  new G4PVPlacement(CEE_eTOF->transeTOF[1],
+                    CEE_eTOF->logiceTOF[1],            //its logical volume
                     "CEE_eTOF2_phys",               //its name
                     CEE_world_logic,                     //its mother  volume
                     false,                 //no boolean operation
@@ -333,6 +334,33 @@ void T1DetectorConstruction::ConstructSDandField()
 	this->SetupField();
 }
 
+template<typename Geom_t, typename Digi_t> G4bool MRPCSetup(Geom_t* Geometry, G4int number, CEEMRPCDirection direction, G4int depth=1)
+{
+	for(G4int i=1; i<=number; i++)
+	{
+		G4String detName = "CEE_";
+		detName+=typeid(Geom_t).name();
+		std::vector<G4LogicalVolume*> SLVList;
+		if(number==1)
+		{
+			detName+="_det";
+			SLVList = Geometry->GetSensitiveLVs();
+		}
+		else
+		{
+			detName+=(std::to_string(i)+"_det");
+			SLVList = Geometry->GetSensitiveLVs(i-1);
+		}
+		std::cerr << "CEE_MRPC " << detName << std::endl;
+		Digi_t* det = new Digi_t(detName, direction, depth);
+		G4SDManager::GetSDMpointer()->AddNewDetector(det);
+		for(auto itr: SLVList)
+		{
+			itr->SetSensitiveDetector(det);
+		}
+	}
+}
+
 void T1DetectorConstruction::SetupDetectors()
 {
 	// sensitive detectors
@@ -382,6 +410,17 @@ void T1DetectorConstruction::SetupDetectors()
 			for(auto layerItr: towerItr.second)
 				layerItr->SetSensitiveDetector(det);
 		}
+	}
+	// MRPC
+	{
+		G4int depth=1;
+		// T0
+		/* MRPCSetup<T1T0, T1MRPCDigi>(CEE_T0, 1, depth);
+		 */
+		// iTOF
+		MRPCSetup<T1iTOF, T1MRPCDigi>(CEE_iTOF, 2, CEEMRPCDirection::Z, depth);
+		// eTOF
+		MRPCSetup<T1eTOF, T1MRPCDigi>(CEE_eTOF, 2, CEEMRPCDirection::Y, depth);
 	}
 }
 

@@ -12,6 +12,7 @@
 #include "CEEEventLoggingSession.hh"
 #include <G4UImanager.hh>
 #include <G4THitsMap.hh>
+#include "T1MRPCDigi.hh"
 
 #include <fstream>
 using namespace std;
@@ -94,6 +95,14 @@ void T1EventAction::EndOfEventAction(const G4Event* evt)
 				G4MultiFunctionalDetector* zdcDigi = dynamic_cast<G4MultiFunctionalDetector*>(SDMan->FindSensitiveDetector("CEE_ZDC_Tower_"+towerID+"_det"));
 				if(((G4THitsMap<G4double>*)(HCE->GetHC(zdcDigi->GetPrimitive(0)->GetCollectionID(0))))->entries())
 					PrintMultiPrimitive<G4MultiFunctionalDetector>(zdcDigi);
+			}
+			//TOF
+			//iTOF
+			{
+				PrintMultiPrimitive<T1MRPCDigi>(dynamic_cast<T1MRPCDigi*>(SDMan->FindSensitiveDetector("CEE_6T1iTOF1_det")));
+				PrintMultiPrimitive<T1MRPCDigi>(dynamic_cast<T1MRPCDigi*>(SDMan->FindSensitiveDetector("CEE_6T1iTOF2_det")));
+				PrintMultiPrimitive<T1MRPCDigi>(dynamic_cast<T1MRPCDigi*>(SDMan->FindSensitiveDetector("CEE_6T1eTOF1_det")));
+				PrintMultiPrimitive<T1MRPCDigi>(dynamic_cast<T1MRPCDigi*>(SDMan->FindSensitiveDetector("CEE_6T1eTOF2_det")));
 			}
 			// relocating G4cout back to screen
 			if(UI) UI->SetCoutDestination(oldSession);
