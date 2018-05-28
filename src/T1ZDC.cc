@@ -119,7 +119,7 @@ T1ZDC::T1ZDC()
 
 
       G4Box* solidZDCbox = new G4Box(nameZDC+"_box_"+nowboxid+"_solid",0.5*box_dx*mm,0.5*box_dy*mm,0.5*box_dz*mm);
-      G4Material* matZDCbox = nist->FindOrBuildMaterial("G4_AIR");                /////gai
+      G4Material* matZDCbox = nist->FindOrBuildMaterial("G4_STAINLESS-STEEL");                /////gai
       G4VisAttributes* visZDCbox = new G4VisAttributes(G4Colour(0.1,0.8,1.1,0));  /////gai
       logicZDCbox = new G4LogicalVolume(solidZDCbox,matZDCbox,nameZDC+"_box_"+nowboxid+"_logic");
       logicZDCbox -> SetVisAttributes(visZDCbox);
@@ -167,7 +167,7 @@ T1ZDC::T1ZDC()
 
 
         G4Box* solidZDCboxTower = new G4Box(nameZDC+"_box_"+nowboxid+"_Tower_"+nowTowerid+"_solid",0.5*box_dx*mm,0.5*box_dy*mm,0.5*box_dz*mm);
-        G4Material* matZDCboxTower = nist->FindOrBuildMaterial("G4_AIR");                /////gai
+        G4Material* matZDCboxTower = nist->FindOrBuildMaterial("G4_STAINLESS-STEEL");                /////gai
         G4VisAttributes* visZDCboxTower = new G4VisAttributes(G4Colour(0.1,0.8,1.1,0));  /////gai
         logicZDCboxTower = new G4LogicalVolume(solidZDCboxTower,matZDCboxTower,nameZDC+"_box_"+nowboxid+"_Tower_"+nowTowerid+"_logic");
         logicZDCboxTower -> SetVisAttributes(visZDCboxTower);
@@ -209,7 +209,9 @@ T1ZDC::T1ZDC()
 
           G4Box* solidZDCboxTowerceng = new G4Box(nameZDC+"_box_"+nowboxid+"_Tower_"+nowTowerid+"_ceng_"+cengid+"_solid",0.5*box_dx*mm,0.5*box_dy*mm,0.5*box_dz*mm);
           /////gai
-          G4Material* matZDCboxTowerceng = nist->FindOrBuildMaterial("G4_AIR");                /////gai
+          G4Material* matZDCboxTowerceng = NULL;
+	  if(k%2) matZDCboxTowerceng=nist->FindOrBuildMaterial("G4_Pb");                /////gai
+	  else    matZDCboxTowerceng=nist->FindOrBuildMaterial("G4_SODIUM_IODIDE");
           G4VisAttributes* visZDCboxTowerceng = new G4VisAttributes(G4Colour(0.9,0.1,0.1,0.5));  /////gai
           /*
           if(k%2!=0){
